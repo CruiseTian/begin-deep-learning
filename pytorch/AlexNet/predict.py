@@ -14,7 +14,7 @@ data_transform = transforms.Compose(
 # load image
 images = ["tulips", "dandelion", "roses", "sunflower", "daisy"]
 for i in images:
-    img = Image.open(i+".jpg")
+    img = Image.open("predict/"+i+".jpg")
     plt.imshow(img)
     # plt.show()
     # [N, C, H, W]
