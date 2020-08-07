@@ -33,12 +33,15 @@ class AlexNet(nn.Module):
 
         # 全连接层对图像分类
         self.classifier = nn.Sequential(
+            # FC1
             nn.Dropout(p=0.5),  # 随即失活，防止过拟合
             nn.Linear(128*6*6, 2048),  # 相当于求Z = WX+b
             nn.ReLU(True),
+            # FC2
             nn.Dropout(p=0.5),
             nn.Linear(2048,2048),
             nn.ReLU(True),
+            # FC3
             nn.Linear(2048, num_classes),
         )
 

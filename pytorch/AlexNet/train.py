@@ -73,8 +73,8 @@ optimizer = optim.Adam(net.parameters(), lr=LR)	  # 优化器（训练参数，�
 save_path = './AlexNet.pth'
 best_acc = 0.0
 
-# train_counter = []
-# train_losses = []
+train_counter = []
+train_losses = []
 
 for epoch in range (EPOCH):
     ########################################## train ###############################################
@@ -92,8 +92,8 @@ for epoch in range (EPOCH):
         optimizer.step()								 # 优化器更新参数
         running_loss += loss.item()
 
-        #train_losses.append(loss.item())
-        #train_counter.append((step*BATCH_SIZE) + ((epoch-1)*len(train_loader.dataset)))
+        train_losses.append(loss.item())
+        train_counter.append((step*BATCH_SIZE) + ((epoch-1)*len(train_loader.dataset)))
 
         # 打印训练进度（使训练过程可视化）
         rate = (step + 1) / len(train_loader)           # 当前进度 = 当前step / 训练一轮epoch所需总step
@@ -124,11 +124,11 @@ for epoch in range (EPOCH):
 
 print('Finished Training')
 
-'''
+# 打印训练过程中的loss变化情况
+
 fig = plt.figure()
 plt.plot(train_counter, train_losses, color='blue')
 plt.legend('Train Loss', loc='upper right')
 plt.xlabel('number of training examples')
 plt.ylabel('loss')
 plt.show()
-'''
