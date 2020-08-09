@@ -6,15 +6,15 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from module import AlexNet
+from module import VGG
 import json
 import os
 import time
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 BATCH_SIZE = 32
-EPOCH = 10
-LR = 0.0002
+EPOCH = 30
+LR = 0.0001
 print(DEVICE)
 
 data_transform = {
@@ -29,8 +29,9 @@ data_transform = {
 
 # 数据集处理及加载
 # 获取图像数据集的路径
-data_root = os.path.abspath(os.path.join(os.getcwd(),".."))  		# get data root path 返回上层目录
-image_path = data_root + "/data_set/flower_data/"  				 		# flower data_set path
+data_root = os.getcwd() 		# get data root path 返回上上层目录
+image_path = data_root + "/data_set/flower_data"  				 		# flower data_set path
+# image_path = "/content/flower_data/"
 
 # 导入训练集并进行预处理
 train_dataset = datasets.ImageFolder(root=image_path + "/train",		
@@ -65,12 +66,12 @@ with open('class_indices.json', 'w') as json_file:
     json_file.write(json_str)
 
 
-net = AlexNet(num_classes=5)                          # 实例化网络（输出类别为5）
+net = VGG(num_classes=5)                          # 实例化网络（输出类别为5）
 net.to(DEVICE)                                        # 分配网络到指定的设备（GPU/CPU）训练
 loss_function = nn.CrossEntropyLoss()			 	  # 交叉熵损失
 optimizer = optim.Adam(net.parameters(), lr=LR)	  # 优化器（训练参数，学习率）
 
-save_path = './AlexNet.pth'
+save_path = './VGG.pth'
 best_acc = 0.0
 
 train_counter = []
@@ -123,6 +124,7 @@ for epoch in range (EPOCH):
               (epoch + 1, running_loss / step, val_accurate))
 
 print('Finished Training')
+print("The best accuracy is: ", best_acc)
 
 # 打印训练过程中的loss变化情况
 
