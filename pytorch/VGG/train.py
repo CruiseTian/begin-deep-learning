@@ -13,7 +13,7 @@ import time
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 BATCH_SIZE = 32
-EPOCH = 30
+EPOCH = 40
 LR = 0.0001
 print(DEVICE)
 
@@ -67,6 +67,8 @@ with open('class_indices.json', 'w') as json_file:
 
 
 net = VGG(num_classes=5)                          # 实例化网络（输出类别为5）
+# model_weight_path = os.path.abspath(os.path.join(os.getcwd(),"..//data_set/flower_data/VGG.pth"))
+# net.load_state_dict(torch.load(model_weight_path))
 net.to(DEVICE)                                        # 分配网络到指定的设备（GPU/CPU）训练
 loss_function = nn.CrossEntropyLoss()			 	  # 交叉熵损失
 optimizer = optim.Adam(net.parameters(), lr=LR)	  # 优化器（训练参数，学习率）
@@ -123,14 +125,14 @@ for epoch in range (EPOCH):
         print('[epoch %d] train_loss: %.3f  test_accuracy: %.3f \n' %
               (epoch + 1, running_loss / step, val_accurate))
 
+    # 保存训练过程中的loss变化情况
+    fig = plt.figure()
+    plt.plot(train_counter, train_losses, color='blue')
+    plt.legend('Train Loss', loc='upper right')
+    plt.xlabel('number of training examples')
+    plt.ylabel('loss')
+    # plt.show()
+    plt.savefig("train_loss.svg")
+
 print('Finished Training')
 print("The best accuracy is: ", best_acc)
-
-# 打印训练过程中的loss变化情况
-
-fig = plt.figure()
-plt.plot(train_counter, train_losses, color='blue')
-plt.legend('Train Loss', loc='upper right')
-plt.xlabel('number of training examples')
-plt.ylabel('loss')
-plt.show()

@@ -11,7 +11,7 @@ class VGG(nn.Module):
             nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
             nn.ReLU(True),
             # conv3-64_2 Input:[64,224,224] Output:[64,224,224]
-            nn.Conv2d(64, 64, 3, 1),
+            nn.Conv2d(64, 64, kernel_size=3, padding=1),
             nn.ReLU(True),
 
             # pool1 Output:[64,112,112]
@@ -71,7 +71,7 @@ class VGG(nn.Module):
         self.classifier = nn.Sequential(
             # FC1
             nn.Dropout(p=0.5),  # 随即失活，防止过拟合
-            nn.Linear(512*6*6, 2048),  # 相当于求Z = WX+b
+            nn.Linear(512*7*7, 2048),  # 相当于求Z = WX+b
             nn.ReLU(True),
             # FC2
             nn.Dropout(p=0.5),
